@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VillaTrack — إدارة تأجير الفلل</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=El+Messiri:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brass: #E3AE5A;
+  --dark: #16130F;
+  --white: #FFFFFF;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #16130F 0%, #0F0C08 100%);
+  color: #333;
+}
+
+#login-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-card {
+  background: #221D16;
+  border: 2px solid var(--brass);
+  border-radius: 20px;
+  padding: 40px 30px;
+  width: 100%;
+  max-width: 380px;
+  text-align: center;
+}
+
+.login-brand {
+  font-family: 'Poppins', sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.login-tag {
+  font-size: 13px;
+  color: var(--brass);
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.code-input {
+  width: 100%;
+  text-align: center;
+  font-size: 26px;
+  letter-spacing: 8px;
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(0,0,0,0.3);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 20px;
+  font-family: 'Courier New', monospace;
+}
+
+.code-input::placeholder {
+  letter-spacing: 8px;
+}
+
+.code-input:focus {
+  outline: 2px solid var(--brass);
+  border-color: var(--brass);
+  background: rgba(0,0,0,0.5);
+}
+
+.login-error {
+  color: #E0776A;
+  font-size: 13px;
+  margin-bottom: 15px;
+  min-height: 18px;
+  word-wrap: break-word;
+}
+
+.login-btn {
+  background: var(--brass);
+  color: var(--dark);
+  border: none;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 20px;
+  transition: opacity 0.2s;
+}
+
+.login-btn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(0,0,0,0.2);
+  border-top-color: var(--dark);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.login-hint {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.6;
+}
+
+/* MAIN APP */
+#app-screen {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--dark);
+}
+
+.app-header {
+  background: rgba(0,0,0,0.4);
+  border-bottom: 1px solid rgba(227,174,90,0.2);
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.logout-btn {
+  background: rgba(227,174,90,0.2);
+  color: var(--brass);
+  border: 1px solid var(--brass);
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.app-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(227,174,90,0.2);
+  background: rgba(0,0,0,0.2);
+  overflow-x: auto;
+}
+
+.tab {
+  flex: 1;
+  padding: 12px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+}
+
+.tab.active {
+  color: var(--brass);
+  border-bottom-color: var(--brass);
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(227,174,90,0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brass);
+  margin-bottom: 10px;
+}
+
+.card-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.6;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 4px;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(227,174,90,0.3);
+  background: rgba(0,0,0,0.3);
+  color: var(--white);
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: 1px solid var(--brass);
+  border-color: var(--brass);
+  background: rgba(0,0,0,0.5);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.btn-primary {
+  background: var(--brass);
+  color: var(--dark);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  background: rgba(227,174,90,0.1);
+  color: var(--brass);
+  border: 1px solid var(--brass);
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-delete {
+  background: rgba(224,119,106,0.2);
+  color: #E0776A;
+  border: 1px solid #E0776A;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.stat-box {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(227,174,90,0.2);
+  padding: 12px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brass);
+}
+
+.stat-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+}
+
+.list-item {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(227,174,90,0.2);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list-item-info {
+  flex: 1;
+  font-size: 12px;
+  color: rgba(255,255,255,0.9);
+}
+
+.list-item-actions {
+  display: flex;
+  gap: 6px;
+}
+
+@media (max-width: 600px) {
+  .login-card {
+    padding: 30px 20px;
+  }
+  
+  .stats-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .app-tabs {
+    overflow-x: auto;
+  }
+  
+  .tab {
+    flex: 0 0 auto;
+    min-width: 60px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-brand">VillaTrack</div>
+    <div class="login-tag">إدارة تأجير الفلل</div>
+    <input class="code-input" id="login-code" type="tel" inputmode="numeric" maxlength="6" placeholder="——————" autocomplete="off">
+    <div class="login-error" id="login-error"></div>
+    <button class="login-btn" id="login-btn" onclick="handleLogin()">دخول</button>
+    <div class="login-hint">أدخل كود التفعيل المكوّن من 6 أرقام<br>لو ما عندك كود، تواصل مع من زودك بالتطبيق</div>
+  </div>
+</div>
+
+<!-- MAIN APP SCREEN -->
+<div id="app-screen">
+  <div class="app-header">
+    <div class="app-title">VillaTrack</div>
+    <button class="logout-btn" onclick="handleLogout()">خروج</button>
+  </div>
+  
+  <div class="app-tabs">
+    <button class="tab active" onclick="switchTab('home')">الرئيسية</button>
+    <button class="tab" onclick="switchTab('bookings')">الحجوزات</button>
+    <button class="tab" onclick="switchTab('expenses')">المصروفات</button>
+    <button class="tab" onclick="switchTab('reports')">التقارير</button>
+  </div>
+  
+  <div class="app-content">
+    <!-- HOME TAB -->
+    <div id="home" class="section active">
+      <div class="card">
+        <div class="card-title">مرحبا 👋</div>
+        <div class="card-text">اختر قسم من الأعلى لبدء العمل</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-value" id="total-villas">0</div>
+          <div class="stat-label">الفلل</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" id="active-bookings">0</div>
+          <div class="stat-label">حجوزات نشطة</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- BOOKINGS TAB -->
+    <div id="bookings" class="section">
+      <div class="card">
+        <div class="card-title">إضافة حجز جديد</div>
+        <div class="form-group">
+          <label class="form-label">اسم الضيف</label>
+          <input class="form-input" id="booking-guest-name" type="text">
+        </div>
+        <div class="form-group">
+          <label class="form-label">رقم الهاتف</label>
+          <input class="form-input" id="booking-phone" type="tel">
+        </div>
+        <div class="form-group">
+          <label class="form-label">تاريخ الدخول</label>
+          <input class="form-input" id="booking-check-in" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">تاريخ الخروج</label>
+          <input class="form-input" id="booking-check-out" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">المبلغ الكلي</label>
+          <input class="form-input" id="booking-total" type="number">
+        </div>
+        <div class="form-group">
+          <label class="form-label">العربون</label>
+          <input class="form-input" id="booking-deposit" type="number">
+        </div>
+        <button class="btn-primary" onclick="saveBooking()">حفظ الحجز</button>
+      </div>
+      
+      <div id="bookings-list"></div>
+    </div>
+    
+    <!-- EXPENSES TAB -->
+    <div id="expenses" class="section">
+      <div class="card">
+        <div class="card-title">إضافة مصروف جديد</div>
+        <div class="form-group">
+          <label class="form-label">نوع المصروف</label>
+          <select class="form-select" id="expense-category">
+            <option value="">اختر...</option>
+            <option value="maintenance">صيانة</option>
+            <option value="cleaning">تنظيف</option>
+            <option value="utilities">فواتير</option>
+            <option value="other">أخرى</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">المبلغ</label>
+          <input class="form-input" id="expense-amount" type="number">
+        </div>
+        <div class="form-group">
+          <label class="form-label">التاريخ</label>
+          <input class="form-input" id="expense-date" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">ملاحظات</label>
+          <textarea class="form-textarea" id="expense-notes"></textarea>
+        </div>
+        <button class="btn-primary" onclick="saveExpense()">حفظ المصروف</button>
+      </div>
+      
+      <div id="expenses-list"></div>
+    </div>
+    
+    <!-- REPORTS TAB -->
+    <div id="reports" class="section">
+      <div class="card">
+        <div class="card-title">ملخص الأرباح</div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-value" id="total-income">0</div>
+            <div class="stat-label">الدخل الكلي</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-value" id="total-expenses">0</div>
+            <div class="stat-label">المصروفات</div>
+          </div>
+        </div>
+        <div class="stat-box" style="text-align: center;">
+          <div style="color: #6FBF8B; font-size: 14px; font-weight: 600;">الربح الصافي</div>
+          <div class="stat-value" id="net-profit">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG =====
+const SUPABASE_URL = 'https://iqzrrxvraremzzxdysxb.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxenJyeHZyYXJlbXp6eHR5c3giLCJyb2xlIjoiYW5vbiIsImlhdDoxNzg5ODk2MTAxLCJleHAiOjIxMDU0NzIxMDF9.bJTow7HhmQ4jEzzYT4VGTna0UYnydiMSweEfa6McvS4';
+const API_URL = SUPABASE_URL + '/functions/v1/villa-api';
+
+let currentAccountId = null;
+let currentData = { villas: [], bookings: [], expenses: [] };
+
+// ===== API CALL (VIA NETLIFY PROXY) =====
+async function apiCall(action, payload = {}) {
+  const maxRetries = 2;
+  let lastError = null;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    if (attempt > 0) await new Promise(r => setTimeout(r, 1000 * attempt));
+    
+    let controller = null, timeoutId = null;
+    
+    try {
+      controller = new AbortController();
+      timeoutId = setTimeout(() => controller.abort(), 20000);
+    } catch (e) {
+      controller = null;
+    }
+    
+    try {
+      // BUILD REQUEST BODY
+      const requestBody = {
+        action: action,
+        code: payload.code || undefined,
+        account_id: payload.account_id || undefined,
+        villa_id: payload.villa_id || undefined,
+        booking: payload.booking || undefined,
+        expense: payload.expense || undefined,
+        booking_id: payload.booking_id || undefined,
+        expense_id: payload.expense_id || undefined
+      };
+      
+      Object.keys(requestBody).forEach(k => 
+        requestBody[k] === undefined && delete requestBody[k]
+      );
+      
+      // Use Netlify proxy instead of direct connection
+      const proxyUrl = '/api/villa-proxy?target=' + encodeURIComponent(API_URL);
+      
+      const fetchOpts = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify(requestBody),
+      };
+      
+      if (controller) fetchOpts.signal = controller.signal;
+      
+      const res = await fetch(proxyUrl, fetchOpts);
+      if (timeoutId) clearTimeout(timeoutId);
+      
+      let text = await res.text();
+      let data;
+      
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Parse error:', e, 'body:', text);
+        return { success: false, message: 'الخادم أرسل رد غير متوقع' };
+      }
+      
+      if (data && typeof data.success === 'boolean') {
+        return data;
+      }
+      
+      return { success: false, message: 'الخادم أرسل رد غير صالح' };
+      
+    } catch (err) {
+      if (timeoutId) clearTimeout(timeoutId);
+      
+      if (err && err.name === 'AbortError') {
+        lastError = 'انتهت مهلة الاتصال. حاول مرة أخرى';
+      } else {
+        lastError = err.message || 'خطأ شبكة';
+      }
+      
+      if (attempt < maxRetries) continue;
+    }
+  }
+  
+  return { success: false, message: lastError || 'تعذر الاتصال بالخادم' };
+}
+
+// ===== LOGIN =====
+async function handleLogin() {
+  const code = document.getElementById('login-code').value.trim();
+  const btn = document.getElementById('login-btn');
+  const errorDiv = document.getElementById('login-error');
+  
+  errorDiv.textContent = '';
+  
+  if (!/^\d{6}$/.test(code)) {
+    errorDiv.textContent = 'الكود يجب أن يكون 6 أرقام';
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>جاري التحقق...';
+  
+  const result = await apiCall('login', { code });
+  
+  btn.disabled = false;
+  btn.innerHTML = 'دخول';
+  
+  if (!result.success) {
+    errorDiv.textContent = result.message || 'الكود غير صحيح';
+    return;
+  }
+  
+  currentAccountId = result.account_id;
+  localStorage.setItem('villatrack_account_id', currentAccountId);
+  
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'flex';
+  
+  loadData();
+}
+
+// ===== LOGOUT =====
+function handleLogout() {
+  if (confirm('هل تريد تسجيل الخروج؟')) {
+    localStorage.removeItem('villatrack_account_id');
+    currentAccountId = null;
+    currentData = { villas: [], bookings: [], expenses: [] };
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('app-screen').style.display = 'none';
+    document.getElementById('login-code').value = '';
+    document.getElementById('login-error').textContent = '';
+  }
+}
+
+// ===== TABS =====
+function switchTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  if (tab === 'reports') loadReports();
+}
+
+// ===== LOAD DATA =====
+async function loadData() {
+  const result = await apiCall('get-data', { account_id: currentAccountId });
+  if (result.success && result.data) {
+    currentData = result.data;
+    renderBookings();
+    renderExpenses();
+    updateStats();
+  }
+}
+
+// ===== BOOKINGS =====
+async function saveBooking() {
+  const booking = {
+    villa_id: 1,
+    guest_name: document.getElementById('booking-guest-name').value,
+    guest_phone: document.getElementById('booking-phone').value,
+    check_in: document.getElementById('booking-check-in').value,
+    check_out: document.getElementById('booking-check-out').value,
+    total_amount: parseFloat(document.getElementById('booking-total').value),
+    deposit_amount: parseFloat(document.getElementById('booking-deposit').value),
+    payment_status: 'pending',
+    notes: ''
+  };
+  
+  const result = await apiCall('save-booking', { account_id: currentAccountId, booking });
+  if (result.success) {
+    alert('تم حفظ الحجز');
+    document.querySelectorAll('.form-input[id^="booking-"]').forEach(i => i.value = '');
+    loadData();
+  } else {
+    alert('خطأ: ' + result.message);
+  }
+}
+
+function renderBookings() {
+  const list = document.getElementById('bookings-list');
+  list.innerHTML = '';
+  
+  if (!currentData.bookings || currentData.bookings.length === 0) {
+    list.innerHTML = '<div class="card"><div class="card-text">لا توجد حجوزات</div></div>';
+    return;
+  }
+  
+  currentData.bookings.forEach(b => {
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    item.innerHTML = `
+      <div class="list-item-info">
+        <strong>${b.guest_name}</strong><br>
+        <small>${b.check_in} إلى ${b.check_out}</small><br>
+        <small style="color: var(--brass);">${b.total_amount} دينار</small>
+      </div>
+      <div class="list-item-actions">
+        <button class="btn-delete" onclick="deleteBooking(${b.id})">حذف</button>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+async function deleteBooking(id) {
+  if (confirm('هل تريد حذف هذا الحجز؟')) {
+    const result = await apiCall('delete-booking', { account_id: currentAccountId, booking_id: id });
+    if (result.success) {
+      loadData();
+    }
+  }
+}
+
+// ===== EXPENSES =====
+async function saveExpense() {
+  const expense = {
+    villa_id: 1,
+    category: document.getElementById('expense-category').value,
+    amount: parseFloat(document.getElementById('expense-amount').value),
+    expense_date: document.getElementById('expense-date').value,
+    notes: document.getElementById('expense-notes').value
+  };
+  
+  const result = await apiCall('save-expense', { account_id: currentAccountId, expense });
+  if (result.success) {
+    alert('تم حفظ المصروف');
+    document.getElementById('expense-category').value = '';
+    document.getElementById('expense-amount').value = '';
+    document.getElementById('expense-date').value = '';
+    document.getElementById('expense-notes').value = '';
+    loadData();
+  } else {
+    alert('خطأ: ' + result.message);
+  }
+}
+
+function renderExpenses() {
+  const list = document.getElementById('expenses-list');
+  list.innerHTML = '';
+  
+  if (!currentData.expenses || currentData.expenses.length === 0) {
+    list.innerHTML = '<div class="card"><div class="card-text">لا توجد مصروفات</div></div>';
+    return;
+  }
+  
+  currentData.expenses.forEach(e => {
+    const item = document.createElement('div');
+    item.className = 'list-item';
+    item.innerHTML = `
+      <div class="list-item-info">
+        <strong>${e.category}</strong><br>
+        <small>${e.expense_date}</small><br>
+        <small style="color: var(--brass);">${e.amount} دينار</small>
+      </div>
+      <div class="list-item-actions">
+        <button class="btn-delete" onclick="deleteExpense(${e.id})">حذف</button>
+      </div>
+    `;
+    list.appendChild(item);
+  });
+}
+
+async function deleteExpense(id) {
+  if (confirm('هل تريد حذف هذا المصروف؟')) {
+    const result = await apiCall('delete-expense', { account_id: currentAccountId, expense_id: id });
+    if (result.success) {
+      loadData();
+    }
+  }
+}
+
+// ===== STATS & REPORTS =====
+function updateStats() {
+  const villas = currentData.villas ? currentData.villas.length : 0;
+  const bookings = currentData.bookings ? currentData.bookings.length : 0;
+  
+  document.getElementById('total-villas').textContent = villas;
+  document.getElementById('active-bookings').textContent = bookings;
+}
+
+function loadReports() {
+  const bookings = currentData.bookings || [];
+  const expenses = currentData.expenses || [];
+  
+  const income = bookings.reduce((sum, b) => sum + (b.total_amount || 0), 0);
+  const expensesTotal = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+  const profit = income - expensesTotal;
+  
+  document.getElementById('total-income').textContent = income.toFixed(0);
+  document.getElementById('total-expenses').textContent = expensesTotal.toFixed(0);
+  document.getElementById('net-profit').textContent = profit.toFixed(0);
+}
+
+// ===== INIT =====
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('villatrack_account_id');
+  if (saved) {
+    currentAccountId = saved;
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-screen').style.display = 'flex';
+    loadData();
+  }
+});
+</script>
+
+</body>
+</html>

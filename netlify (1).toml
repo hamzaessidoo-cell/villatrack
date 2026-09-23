@@ -1,0 +1,8 @@
+[build]
+  command = "echo 'Site ready'"
+  publish = "."
+  edge_functions = "netlify/edge-functions"
+
+[[edge_functions]]
+  path = "/api/villa-proxy"
+  function = "villa-proxy"
