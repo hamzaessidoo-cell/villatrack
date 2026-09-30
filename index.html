@@ -2,43 +2,56 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="VillaTrack — إدارة الحجوزات اليومية للفيلات بأسلوب فاخر" />
-  <title>VillaTrack | إدارة الفيلات والحجوزات</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#15110e" />
+  <title>VillaTrack | إدارة الحجوزات</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <script src="env.js"></script>
 </head>
 <body>
-<div class="app-shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand"><div class="brand-mark">V</div><div><strong>Villa<span>Track</span></strong><small>إدارة الضيافة بذكاء</small></div></div>
-    <nav class="main-nav" aria-label="التنقل الرئيسي">
-      <button class="nav-item active" data-view="dashboard"><span>⌂</span>لوحة التحكم</button>
-      <button class="nav-item" data-view="villas"><span>◈</span>إدارة الفيلات</button>
-      <button class="nav-item" data-view="bookings"><span>▣</span>الحجوزات والتقويم</button>
-    </nav>
-    <div class="sidebar-footer"><div class="connection-dot"><i></i><span id="connectionLabel">وضع تجريبي</span></div><div class="help-card"><span>✦</span><div><b>مساحتك الفاخرة</b><small>كل الحجوزات في مكان واحد</small></div></div></div>
-  </aside>
-  <main class="main-content">
-    <header class="topbar"><button class="mobile-menu" id="mobileMenu">☰</button><div><p class="eyebrow">الثلاثاء، 30 سبتمبر 2026</p><h1 id="pageTitle">صباح الخير، مدير VillaTrack</h1></div><div class="top-actions"><button class="icon-btn">♢<span class="notification-dot"></span></button><div class="avatar">م</div></div></header>
-    <section class="view active" id="dashboardView">
-      <div class="welcome-row"><div><h2>نظرة عامة على الأداء</h2><p>تابع حركة منشأتك وقراراتك اليومية من لوحة واحدة.</p></div><button class="primary-btn" id="quickBookingBtn">＋ حجز جديد</button></div>
-      <div class="stats-grid">
-        <article class="stat-card gold"><div class="stat-head"><span>إجمالي الإيرادات</span><b>◈</b></div><strong id="totalRevenue">0 د.ل</strong><small class="trend positive">↑ 12.8% <em>من الشهر الماضي</em></small></article>
-        <article class="stat-card blue"><div class="stat-head"><span>نسبة الإشغال</span><b>◒</b></div><strong id="occupancyRate">0%</strong><small class="trend positive">↑ 6.4% <em>من الشهر الماضي</em></small></article>
-        <article class="stat-card purple"><div class="stat-head"><span>الحجوزات النشطة</span><b>▣</b></div><strong id="activeBookings">0</strong><small class="trend neutral">هذا الأسبوع <em>حجوزات مؤكدة</em></small></article>
-        <article class="stat-card green"><div class="stat-head"><span>إجمالي الفيلات</span><b>⌂</b></div><strong id="totalVillas">0</strong><small class="trend neutral"><span id="availableVillas">0</span> متاحة الآن</small></article>
-      </div>
-      <div class="charts-grid"><article class="panel chart-panel"><div class="panel-heading"><div><h3>الإيرادات الشهرية</h3><p>أداء آخر 6 أشهر</p></div><select><option>آخر 6 أشهر</option><option>هذا العام</option></select></div><div class="chart-wrap"><canvas id="revenueChart"></canvas></div></article><article class="panel chart-panel"><div class="panel-heading"><div><h3>توزيع الحجوزات</h3><p>حسب حالة الدفع</p></div><span class="gold-label">مباشر</span></div><div class="donut-wrap"><canvas id="bookingChart"></canvas><div class="donut-center"><strong id="bookingTotal">0</strong><small>حجز</small></div></div><div class="legend" id="bookingLegend"></div></article></div>
-      <div class="panel recent-panel"><div class="panel-heading"><div><h3>آخر الحجوزات</h3><p>أحدث نشاط في منشأتك</p></div><button class="text-btn" data-view="bookings">عرض الكل ←</button></div><div class="table-scroll"><table><thead><tr><th>الضيف</th><th>الفيلا</th><th>الوصول</th><th>المغادرة</th><th>الحالة</th><th>الإجمالي</th><th></th></tr></thead><tbody id="recentBookingsBody"></tbody></table></div></div>
-    </section>
-    <section class="view" id="villasView"><div class="section-heading"><div><p class="eyebrow">المحفظة العقارية</p><h2>إدارة الفيلات</h2><p>تحكم في وحداتك وحالتها التشغيلية.</p></div><button class="primary-btn" id="addVillaBtn">＋ إضافة فيلا</button></div><div class="toolbar"><div class="search-box">⌕<input id="villaSearch" placeholder="ابحث باسم الفيلا..." /></div><div class="filter-tabs" id="villaFilters"><button class="active" data-filter="all">الكل</button><button data-filter="available">متاحة</button><button data-filter="booked">محجوزة</button><button data-filter="maintenance">صيانة</button></div></div><div class="villa-grid" id="villaGrid"></div></section>
-    <section class="view" id="bookingsView"><div class="section-heading"><div><p class="eyebrow">إدارة الإقامة</p><h2>الحجوزات والتقويم</h2><p>راجع المواعيد، المدفوعات، وأصدر الفواتير.</p></div><button class="primary-btn" id="addBookingBtn">＋ حجز جديد</button></div><div class="booking-summary"><div><span>إجمالي الحجوزات</span><strong id="allBookingsCount">0</strong></div><div><span>مدفوع بالكامل</span><strong id="paidBookingsCount">0</strong></div><div><span>دفعات معلقة</span><strong id="pendingBookingsCount">0</strong></div><div><span>إيرادات مؤكدة</span><strong id="confirmedRevenue">0 د.ل</strong></div></div><div class="panel"><div class="toolbar"><div class="search-box">⌕<input id="bookingSearch" placeholder="ابحث باسم الضيف أو الفيلا..." /></div><select class="date-filter" id="bookingStatusFilter"><option value="all">كل الحالات</option><option value="confirmed">مؤكد</option><option value="pending">معلق</option><option value="cancelled">ملغي</option></select></div><div class="table-scroll"><table><thead><tr><th>الضيف</th><th>الفيلا</th><th>التواريخ</th><th>الليالي</th><th>الدفع</th><th>الحالة</th><th>الإجمالي</th><th>إجراء</th></tr></thead><tbody id="bookingsBody"></tbody></table></div></div></section>
-  </main>
-</div>
-<div class="modal-backdrop" id="modalBackdrop"><div class="modal"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div><div class="toast" id="toast"><span>✓</span><p></p></div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script><script type="module" src="app.js"></script>
+  <div class="app-shell">
+    <header class="mobile-header">
+      <button class="circle-btn" id="mobileMenu" aria-label="القائمة">☰</button>
+      <div class="wordmark">Villa<span>Track</span></div>
+      <button class="circle-btn" id="quickBookingBtn" aria-label="حجز جديد">＋</button>
+    </header>
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><div class="brand-mark">V</div><div><strong>Villa<span>Track</span></strong><small>إدارة الحجوزات اليومية</small></div></div>
+      <nav class="main-nav" aria-label="التنقل الرئيسي">
+        <button class="nav-item active" data-view="dashboard"><span>⌂</span>الرئيسية</button>
+        <button class="nav-item" data-view="bookings"><span>▣</span>الحجوزات والتقويم</button>
+        <button class="nav-item" data-view="villas"><span>⌂</span>الفيلات</button>
+        <button class="nav-item" data-view="reports"><span>▤</span>الفواتير والتقارير</button>
+      </nav>
+      <div class="sidebar-footer"><div class="connection-dot"><i></i><span id="connectionLabel">وضع تجريبي</span></div></div>
+    </aside>
+    <main class="main-content">
+      <section class="view active" id="dashboardView">
+        <div class="desktop-top"><div><p class="eyebrow" id="todayLabel">اليوم</p><h1>مساء الخير، مدير VillaTrack</h1></div><button class="outline-btn" data-view="bookings">عرض التقويم</button></div>
+        <div class="period-switch"><button class="active" data-period="month">هذا الشهر</button><button data-period="all">كل الفترات</button></div>
+        <div class="month-bar"><button class="circle-btn" id="prevMonth">‹</button><h2 id="monthTitle">سبتمبر 2026</h2><button class="circle-btn" id="nextMonth">›</button></div>
+        <article class="hero-card"><p>صافي الربح</p><strong id="netProfit">0 د.ل</strong><div class="hero-metrics"><div><small>الدخل</small><b id="monthIncome">0 د.ل</b></div><div><small>المصروفات</small><b class="danger" id="monthExpenses">0 د.ل</b></div><div><small>الحجوزات</small><b id="monthBookings">0</b></div></div></article>
+        <div class="section-line"><h2>الحجوزات القادمة</h2><button class="text-btn" data-view="bookings">عرض الكل</button></div>
+        <div id="upcomingBookings" class="booking-list"></div>
+        <div class="desktop-dashboard-grid"><article class="panel"><div class="section-line"><h3>ملخص الأداء</h3><span class="status-dot">متصل</span></div><div class="mini-stats"><div><span>إجمالي الفيلات</span><b id="totalVillas">0</b></div><div><span>الإشغال</span><b id="occupancyRate">0%</b></div><div><span>إيرادات مؤكدة</span><b id="totalRevenue">0 د.ل</b></div></div></article><article class="panel chart-panel"><h3>الدخل الشهري</h3><div class="chart-wrap"><canvas id="revenueChart"></canvas></div></article></div>
+      </section>
+      <section class="view" id="bookingsView">
+        <div class="desktop-top"><div><p class="eyebrow">إدارة الإقامة</p><h1>الحجوزات والتقويم</h1></div><button class="primary-btn" id="addBookingBtn">＋ حجز جديد</button></div>
+        <div class="period-switch"><button class="active" data-booking-filter="month">هذا الشهر</button><button data-booking-filter="all">كل الحجوزات</button></div>
+        <div class="month-bar"><button class="circle-btn" id="calendarPrev">‹</button><h2 id="calendarTitle">سبتمبر 2026</h2><button class="circle-btn" id="calendarNext">›</button></div>
+        <article class="calendar-card"><div class="calendar-week"><span>أحد</span><span>اثنين</span><span>ثلاثاء</span><span>أربعاء</span><span>خميس</span><span>جمعة</span><span>سبت</span></div><div id="calendarGrid" class="calendar-grid"></div></article>
+        <div class="booking-summary"><div><span>الدخل</span><strong id="confirmedRevenue">0 د.ل</strong></div><div><span>حجوزات الشهر</span><strong id="allBookingsCount">0</strong></div><div><span>مدفوع</span><strong id="paidBookingsCount">0</strong></div><div><span>معلق</span><strong id="pendingBookingsCount">0</strong></div></div>
+        <div class="panel booking-table-panel"><div class="section-line"><h2>كل الحجوزات</h2><div class="table-tools"><input id="bookingSearch" placeholder="بحث باسم الضيف أو الفيلا" /><select id="bookingStatusFilter"><option value="all">كل الحالات</option><option value="confirmed">مؤكد</option><option value="pending">معلق</option><option value="cancelled">ملغي</option></select></div></div><div class="table-scroll"><table><thead><tr><th>الضيف</th><th>الفيلا</th><th>الإقامة</th><th>الدفع</th><th>الحالة</th><th>الإجمالي</th><th>إجراء</th></tr></thead><tbody id="bookingsBody"></tbody></table></div></div>
+      </section>
+      <section class="view" id="villasView"><div class="desktop-top"><div><p class="eyebrow">المحفظة العقارية</p><h1>الفيلات</h1></div><button class="primary-btn" id="addVillaBtn">＋ إضافة فيلا</button></div><div class="filter-tabs" id="villaFilters"><button class="active" data-filter="all">الكل</button><button data-filter="available">متاحة</button><button data-filter="booked">محجوزة</button><button data-filter="maintenance">صيانة</button></div><div class="villa-grid" id="villaGrid"></div></section>
+      <section class="view" id="reportsView"><div class="desktop-top"><div><p class="eyebrow">مركز المستندات</p><h1>الفواتير والتقارير</h1></div></div><article class="panel report-intro"><h2>فواتير الحجوزات</h2><p>نزّل فاتورة منظمة تحتوي على بيانات الضيف والإقامة والمبلغ وحالة الدفع.</p></article><div id="invoiceList" class="invoice-list"></div></section>
+    </main>
+    <nav class="bottom-nav"><button class="active" data-view="dashboard"><span>⌂</span>الرئيسية</button><button data-view="bookings"><span>▣</span>الحجوزات</button><button data-view="villas"><span>⌂</span>الفيلات</button><button data-view="reports"><span>▤</span>الفواتير</button></nav>
+  </div>
+  <div class="modal-backdrop" id="modalBackdrop"><div class="modal"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
+  <div class="toast" id="toast"><span>✓</span><p></p></div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script><script type="module" src="app.js"></script>
 </body></html>
