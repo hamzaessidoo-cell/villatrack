@@ -1,0 +1,7 @@
+{
+  "name": "villatrack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "VillaTrack luxury villa booking SaaS dashboard",
+  "scripts": { "build": "node scripts/inject-env.js" }
+}
