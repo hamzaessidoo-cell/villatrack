@@ -36,3 +36,16 @@ export async function removeBooking(id) {
   if (!supabase) return { error: null };
   return supabase.from('bookings').delete().eq('id', id);
 }
+export async function hashLicenseCode(raw) {
+  const bytes = new TextEncoder().encode(raw);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map(x => x.toString(16).padStart(2, '0')).join('');
+}
+export async function activateLicense(raw, deviceId) {
+  if (!supabase) return { data: [{ ok: true, license_status: 'demo', message: 'offline_demo' }], error: null };
+  return supabase.rpc('vt_activate_license', { p_code_hash: await hashLicenseCode(raw), p_device_id: deviceId });
+}
+export async function touchLicense(raw, deviceId) {
+  if (!supabase) return { data: [{ ok: true, license_status: 'demo', message: 'offline_demo' }], error: null };
+  return supabase.rpc('vt_touch_license', { p_code_hash: await hashLicenseCode(raw), p_device_id: deviceId });
+}

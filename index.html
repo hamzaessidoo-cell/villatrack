@@ -12,6 +12,19 @@
   <script src="env.js"></script>
 </head>
 <body>
+  <div class="activation-gate" id="activationGate">
+    <div class="activation-card">
+      <div class="activation-logo" aria-label="VillaTrack logo"><svg viewBox="0 0 64 64" role="img"><path d="M12 30 32 13l20 17v21H12Z"/><path d="M24 51V36h16v15M9 31 32 11l23 20"/><circle cx="48" cy="17" r="6"/></svg></div>
+      <p class="eyebrow">منصة إدارة العقارات</p>
+      <h1>مرحباً بك في <span>VillaTrack</span></h1>
+      <p>أدخل كود التفعيل للمتابعة إلى لوحة إدارة الحجوزات والفيلات. لن يتم حذف أو تغيير بياناتك عند التفعيل.</p>
+      <form id="activationForm">
+        <label>كود التفعيل<input id="activationCode" autocomplete="off" placeholder="VILLA-XXXX-XXXX" required></label>
+        <button class="primary-btn" type="submit">تفعيل التطبيق</button>
+      </form>
+      <small id="activationMessage">التفعيل مرتبط بهذا الجهاز ويمكن تغييره من إعدادات الترخيص.</small>
+    </div>
+  </div>
   <div class="app-shell">
     <header class="mobile-header">
       <button class="circle-btn" id="mobileMenu" aria-label="القائمة">☰</button>
@@ -19,7 +32,7 @@
       <button class="circle-btn" id="quickBookingBtn" aria-label="حجز جديد">＋</button>
     </header>
     <aside class="sidebar" id="sidebar">
-      <div class="brand"><div class="brand-mark">V</div><div><strong>Villa<span>Track</span></strong><small>إدارة الحجوزات اليومية</small></div></div>
+      <div class="brand"><div class="brand-mark" aria-label="VillaTrack logo"><svg viewBox="0 0 64 64" role="img"><path d="M12 30 32 13l20 17v21H12Z"/><path d="M24 51V36h16v15M9 31 32 11l23 20"/><circle cx="48" cy="17" r="6"/></svg></div><div><strong>Villa<span>Track</span></strong><small>إدارة الحجوزات اليومية</small></div></div>
       <nav class="main-nav" aria-label="التنقل الرئيسي">
         <button class="nav-item active" data-view="dashboard"><span>⌂</span>الرئيسية</button>
         <button class="nav-item" data-view="bookings"><span>▣</span>الحجوزات والتقويم</button>
@@ -30,7 +43,7 @@
     </aside>
     <main class="main-content">
       <section class="view active" id="dashboardView">
-        <div class="desktop-top"><div><p class="eyebrow" id="todayLabel">اليوم</p><h1>مساء الخير، مدير VillaTrack</h1></div><button class="outline-btn" data-view="bookings">عرض التقويم</button></div>
+        <div class="desktop-top"><div><p class="eyebrow" id="todayLabel">اليوم</p><h1>مرحباً بك في VillaTrack</h1></div><button class="outline-btn" data-view="bookings">عرض التقويم</button></div>
         <div class="period-switch"><button class="active" data-period="month">هذا الشهر</button><button data-period="all">كل الفترات</button></div>
         <div class="month-bar"><button class="circle-btn" id="prevMonth">‹</button><h2 id="monthTitle">سبتمبر 2026</h2><button class="circle-btn" id="nextMonth">›</button></div>
         <article class="hero-card"><p>صافي الربح</p><strong id="netProfit">0 د.ل</strong><div class="hero-metrics"><div><small>الدخل</small><b id="monthIncome">0 د.ل</b></div><div><small>المصروفات</small><b class="danger" id="monthExpenses">0 د.ل</b></div><div><small>الحجوزات</small><b id="monthBookings">0</b></div></div></article>
@@ -53,5 +66,5 @@
   </div>
   <div class="modal-backdrop" id="modalBackdrop"><div class="modal"><button class="modal-close" id="modalClose">×</button><div id="modalContent"></div></div></div>
   <div class="toast" id="toast"><span>✓</span><p></p></div>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script><script type="module" src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script><script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script><script type="module" src="app.js"></script>
 </body></html>
